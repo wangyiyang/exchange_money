@@ -3,8 +3,8 @@
 
 import btcchina
 
-access_key = "cbe5276f-c3c3-4178-8a03-beb881ce2f5e"
-secret_key = "cc480c17-784d-4276-8be8-483be206b60e"
+access_key = ""
+secret_key = ""
 
 bc = btcchina.BTCChina(access_key, secret_key)
 
