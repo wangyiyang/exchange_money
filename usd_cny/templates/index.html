@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<form action="{% url "login" %}" method="post">
+{% csrf_token %}
+<p>{{ err_msg.msg }}</p>
+	Account:<input type="text" name="username" /><br/>
+	Password:<input type="password" name="password" /><br/>
+	<input type="submit" value="Submit"/>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="/static/js/jquery.min.js"></script>
+</head>
+<body>
+<form action="{%url "transfersubmit" %}" method="POST">
+{% csrf_token %}
+<table>
+	<tr>
+	<td>Send:</td>
+	<td><input name="sendAmount" type="text" id="sendAmount" value="100" onblur="get_remit_data()" /></td>
+	<td>
+	<select name="sendCurrency" id="sendCurrency" onchange="get_remit_data()">
+        {% for currency in currencys %}
+		<option value="{{ currency }}" {% if forloop.first %}selected{% endif %}>{{ currency }}</option>
+        {% endfor %}
+	</select>
+	</td>
+	</tr>
+	<tr>
+	<td>
+	Receive:
+	</td>
+	<td><input name="receiveAmount" id="receiveAmount" type="text" readonly />
+	</td>
+	<td>
+	<select name="receiveCurrency" id="receiveCurrency" onchange="get_remit_data()">
+		{% for currency in currencys %}
+		<option value="{{ currency }}" {% if forloop.last  %}selected{% endif %}>{{ currency }}</option>
+        {% endfor %}
+	</select>
+	</td>
+</tr>
+<tr>
+    <td>
+        ExchangeRate:
+    </td>
+    <td>
+        <input id = "roe" name="roe" type="text" value="" readonly/>
+    </td>
+</tr>
+</table>
+{% if error %}
+    <p>您还有订单未处理，如有疑问请查看订单，或将未处理的订单修改为不是“未处理”的状态</p>
+{% endif %}
+<p id="note"></p>
+	<input type="submit" value="Submit">
+<a href="{% url "get_all_platforms_balance" %}">更新比特币余额</a>
+<script type="text/javascript">
+window.onload = function() {
+    get_remit_data();
+}
+
+
+function get_remit_data(){
+    $('#note').text("转换中");
+    var data = {};
+    data.send_amount= $("#sendAmount").val();
+    data.send_currency = $('#sendCurrency').val();
+    data.receive_currency = $('#receiveCurrency').val();
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "{% url 'transfer_exchange' %}",
+        data: data,
+        success: function(msg){
+{#            $("#sendAmount").val(msg.send_amount);#}
+{#            $('#sendCurrency').val(msg.from_currency);#}
+{#            $('#receiveCurrency').val(msg.receive_currency);#}
+
+            $('#receiveAmount').val(msg.revceive_amount);
+            $('#receiveCurrency').val(msg.revceive_currency);
+            $('#roe').val(msg.roe);
+            $('#note').text("");
+        }
+    });
+}
+
+    </script>
+</form>
+</body>
+</html>
