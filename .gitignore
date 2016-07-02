@@ -63,3 +63,7 @@ target/
 
 *.sqlite
 *.sqlite3
+.venv/
+.idea/
+
+.idea/vcs.xml
